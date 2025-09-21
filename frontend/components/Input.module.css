@@ -1,0 +1,24 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  padding: 10px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: var(--glass);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.wrap:focus-within { border-color: rgba(0,194,255,0.5); box-shadow: 0 0 0 6px rgba(0,194,255,0.12), var(--shadow); }
+.input {
+  flex: 1;
+  padding: 12px 14px;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  outline: none;
+}
+.input::placeholder { color: color-mix(in oklab, var(--muted), white 10%); }

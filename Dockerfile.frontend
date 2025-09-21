@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+# Build stage
+FROM node:22-alpine AS build
+WORKDIR /app/frontend
+COPY frontend/package.json ./package.json
+RUN npm ci || npm install
+COPY frontend .
+# VITE_API_BASE must be provided at build time via environment
+ARG VITE_API_BASE
+ENV VITE_API_BASE=${VITE_API_BASE}
+RUN npm run build
+
+# Runtime stage
+FROM nginx:1.27-alpine AS runtime
+WORKDIR /usr/share/nginx/html
+COPY --from=build /app/frontend/dist .
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

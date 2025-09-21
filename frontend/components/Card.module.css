@@ -1,0 +1,13 @@
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--glass);
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.card:hover { border-color: rgba(0,194,255,0.45); box-shadow: 0 12px 30px rgba(0,194,255,0.08), var(--shadow); }
+.panel { padding: 14px 16px; }
+.item { padding: 10px 12px; cursor: pointer; }
+.fadeInUp { animation: fadeInUp .5s ease both; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }

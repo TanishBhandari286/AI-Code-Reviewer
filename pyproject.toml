@@ -1,0 +1,19 @@
+[project]
+name = "code-reviewer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "psycopg2-binary",
+    "python-dotenv",
+    "openai",
+]
+
+[tool.uv]
+index-strategy = "first-index"
+package = false
+

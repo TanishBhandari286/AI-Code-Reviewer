@@ -1,0 +1,31 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Env files and local config
+.env
+*.env
+
+# Node
+node_modules/
+
+# UV cache and tooling
+.uv/
+.ruff_cache/
+.mypy_cache/
+
+# macOS
+.DS_Store
+
+# Local clones (external repos)
+clonedrepos/
+
+# Frontend build output
+frontend/dist/

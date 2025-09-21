@@ -1,0 +1,38 @@
+.root {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  color: var(--text);
+  cursor: pointer;
+  transition: transform .08s ease, background var(--transition), border-color var(--transition), box-shadow var(--transition), filter var(--transition);
+}
+.root:hover { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); }
+.root:active { transform: translateY(1px); }
+.root:disabled { opacity: .6; cursor: not-allowed; }
+
+.primary {
+  position: relative;
+  border: none;
+  color: #07101d;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 24px rgba(0,194,255,0.25);
+  overflow: hidden;
+}
+.primary::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(from 180deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+  filter: blur(14px) saturate(120%);
+  opacity: 0.6;
+  z-index: -1;
+  transition: opacity var(--transition);
+}
+.primary:hover { filter: brightness(1.06); }
+.primary:hover::before { opacity: .85; }
+.primary:focus { box-shadow: var(--ring); }
+
+.cta { animation: pulseGlow 3200ms ease-in-out infinite; }
+@keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(0,194,255,0.0), 0 0 0 0 rgba(124,58,237,0.0); } 50% { box-shadow: 0 0 0 10px rgba(0,194,255,0.06), 0 0 0 18px rgba(124,58,237,0.04); } }
