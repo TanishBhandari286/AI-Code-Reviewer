@@ -83,6 +83,16 @@ Deploying on Coolify (outline):
 	 - Backend /health returns ok over public URL
 	 - Frontend loads and uses the public backend URL
 
+Separate domains (recommended):
+
+- Backend public URL (example): https://backend.tanishbhandari.name
+- Frontend public URL (example): https://review.tanishbhandari.name
+- Set on backend:
+	- CORS_ORIGINS=https://review.tanishbhandari.name
+	- Optional: CORS_ALLOW_CREDENTIALS=true (only if you use cookies/auth)
+- Set on frontend build args:
+	- VITE_API_BASE=https://backend.tanishbhandari.name
+
 ## Notes
 
 - GitHub PR creation requires GitHub CLI (`gh`) and `gh auth login`.

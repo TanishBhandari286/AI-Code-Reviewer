@@ -32,10 +32,19 @@ from backend.ai_utils import classify_file_and_feedback
 
 load_dotenv()
 app = FastAPI(title="Code Reviewer", version="0.1.0")
+
+# Configure CORS via environment
+cors_origins_env = os.getenv("CORS_ORIGINS", "*")
+if cors_origins_env.strip() == "*":
+    _origins = ["*"]
+else:
+    _origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
+allow_credentials = os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() == "true"
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_origins,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -43,6 +52,11 @@ app.add_middleware(
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/")
+def root() -> dict:
+    return {"status": "ok", "service": "code-reviewer", "version": app.version}
 
 
 @app.post("/review")
@@ -251,7 +265,6 @@ if __name__ == "__main__":
         sys.exit(0)
 
     if args.serve:
-        ensure_db()
         uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))
         sys.exit(0)
 

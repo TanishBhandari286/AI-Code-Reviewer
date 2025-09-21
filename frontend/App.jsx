@@ -4,7 +4,7 @@ import BackgroundAnimation from './components/BackgroundAnimation.jsx'
 import FeatureHighlights from './components/FeatureHighlights.jsx'
 import HowItWorks from './components/HowItWorks.jsx'
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
+const API_BASE = import.meta.env.VITE_API_BASE || '/api'
 
 export default function App() {
   const [repo, setRepo] = useState('')
