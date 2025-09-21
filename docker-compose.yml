@@ -6,8 +6,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-code_reviewer}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-    ports:
-      - "127.0.0.1:5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
   backend:
@@ -20,8 +18,6 @@ services:
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/code_reviewer
       PORT: 8000
       REPO_CLONE_DIR: /clonedrepos
-    ports:
-      - "9000:8000"
     depends_on:
       - db
     volumes:
@@ -33,8 +29,6 @@ services:
       args:
         # In production on Coolify, set VITE_API_BASE to your backend's public URL, e.g. https://backend.tanishbhandari.name
         VITE_API_BASE: ${VITE_API_BASE:-/api}
-    ports:
-      - "5173:80"
     depends_on:
       - backend
 volumes:
