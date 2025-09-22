@@ -8,6 +8,8 @@ from fastapi import FastAPI, Body, Path, Query
 from fastapi.responses import JSONResponse
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+import logging
 
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -48,6 +50,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Basic request logging
+logger = logging.getLogger("uvicorn.access")
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    path = request.url.path
+    method = request.method
+    try:
+        response = await call_next(request)
+        logger.info(f"%s %s -> %s", method, path, response.status_code)
+        return response
+    except Exception as e:
+        logger.exception("%s %s raised: %s", method, path, e)
+        raise
 
 @app.get("/health")
 def health() -> dict:
@@ -258,6 +275,7 @@ if __name__ == "__main__":
     parser.add_argument("--serve", action="store_true", help="Run FastAPI server")
     parser.add_argument("--branch", type=str, default="origin/main")
     parser.add_argument("--token", type=str, default=None, help="GitHub token (optional, else env GITHUB_TOKEN)")
+    parser.add_argument("--port", type=int, default=None, help="Port to bind (overrides PORT env)")
     args = parser.parse_args()
 
     if args.health:
@@ -265,7 +283,8 @@ if __name__ == "__main__":
         sys.exit(0)
 
     if args.serve:
-        uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))
+        bind_port = args.port or int(os.getenv("PORT", "9000"))
+        uvicorn.run(app, host="0.0.0.0", port=bind_port)
         sys.exit(0)
 
     if args.repo:

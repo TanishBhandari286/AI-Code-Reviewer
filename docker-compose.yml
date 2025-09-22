@@ -6,6 +6,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-code_reviewer}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-code_reviewer}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     volumes:
       - pgdata:/var/lib/postgresql/data
   backend:
@@ -17,19 +22,26 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/code_reviewer
       PORT: 9000
+      CORS_ORIGINS: https://review.tanishbhandari.name
       REPO_CLONE_DIR: /clonedrepos
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - clonedrepos:/clonedrepos
     ports:
       - "9000:9000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9000/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        VITE_API_BASE: ${VITE_API_BASE:-/api}
+        VITE_API_BASE: ${VITE_API_BASE:-https://backend.tanishbhandari.name}
     depends_on:
       - backend
 volumes:
