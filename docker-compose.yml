@@ -16,21 +16,23 @@ services:
       - .env
     environment:
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/code_reviewer
-      PORT: 8000
+      PORT: 9000
       REPO_CLONE_DIR: /clonedrepos
     depends_on:
       - db
     volumes:
       - clonedrepos:/clonedrepos
+    ports:
+      - "9000:9000"
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        # In production on Coolify, set VITE_API_BASE to your backend's public URL, e.g. https://backend.tanishbhandari.name
         VITE_API_BASE: ${VITE_API_BASE:-/api}
     depends_on:
       - backend
 volumes:
   pgdata:
   clonedrepos:
+
